@@ -3,38 +3,42 @@ slug: ja-jp/real-world-development/cli
 title: "GitHub Copilot CLI"
 authors:
   - geektrainer
-lastUpdated: 2026-06-30
+lastUpdated: 2026-09-18
 ---
 
 **[GitHub Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli)** は、ターミナルで GitHub Copilot をエージェント型のコーディング アシスタントとして利用できるようにします。コードベースを探索し、コードを生成し、コマンドを実行し、外部ツールに接続できます。すべてコマンド ラインから行えるため、グラフィカル エディターに切り替えずに作業の流れを保てます。
 
-これらの演習では、Copilot CLI のインストールと認証から始め、カスタム命令でプロジェクトのコンテキストを与えたうえで、プラン モードを使って意図的に機能を実装します。続いて Playwright MCP サーバーを接続し、実際のブラウザーでその機能をテストします。その後、再利用可能な agent skill と custom agent で Copilot を拡張します。最後に、コンテキスト管理、モデル選択、共有に使う slash command を確認し、作成した内容を振り返ります。また、[GitHub Copilot CLI と Foundry を使う全 3 モジュールのオプション シリーズ][foundry]では、モデルを準備し、ホスト型エージェントを構築してデプロイし、サイトに統合できます。
+このワークショップでは、Tailspin Toys の一連のワークフローに沿って進めます。GitHub Codespaces でプロジェクトを準備し、Copilot CLI をインストールして、星評価の小さな変更を加えた後、最初のプル リクエストを作成します。続いてフィルターの Issue を起点に、アプローチを計画し、機能を実装してレビューします。リポジトリの指示を更新し、品質チェック用のスキルをカスタマイズし、Playwright MCP で動作をテストして、QA エージェントを作成します。最後に、変更全体をレビューし、フィルターのプル リクエストで Agent Merge を使い、便利なスラッシュ コマンドを確認します。[GitHub Copilot CLI と Foundry を使う 3 モジュールのオプション シリーズ][foundry]で、モデルを準備し、ホスト型エージェントを構築・デプロイしてサイトに接続することもできます。
 
-## 演習
+プル リクエストは 2 つ作成します。1 つ目は星評価、2 つ目は指示、スキル、QA プロファイル、テストの更新を含むフィルター機能です。フィルターと品質に関する作業は同じ会話とブランチで進めるため、各ツールを学びながら作業を積み重ねられます。
+
+## レッスン
 
 | 演習 | トピック | 説明 |
 |----------|-------|-------------|
-| [0. 前提条件][ex0] | セットアップ | リポジトリと codespace を作成する |
-| [1. Copilot CLI のインストール][ex1] | インストール | Copilot CLI をインストールして認証する |
-| [2. カスタム命令][ex2] | コンテキスト | 命令を追加し、Copilot CLI がどのように従うかを確認する |
-| [3. コード生成][ex3] | コード生成 | プラン モードを使って機能を生成する |
-| [4. Playwright MCP によるテスト][ex4] | 外部ツール | Playwright MCP サーバーを追加し、ブラウザーで機能をテストする |
-| [5. エージェント スキル][ex5] | スキル | 専門スキルで Copilot を強化する |
-| [6. カスタム エージェント][ex6] | エージェント | カスタム エージェントを確認して使用する |
-| [7. スラッシュ コマンド][ex7] | CLI 機能 | コンテキスト、モデル、共有、cloud agent への任意の委任を確認する |
-| [9. 振り返り][ex9] | まとめ | 重要な概念と次のステップを確認する |
-| [オプション: Foundry を組み込む][foundry] | ホスト型エージェント | モデルを準備し、カタログに基づいた Backer Concierge を構築してデプロイし、Web サイトに接続する |
+| [0. 前提条件][ex0] | セットアップ | リポジトリと Codespace を準備する |
+| [1. Copilot CLI をインストールする][ex1] | インストール | Copilot CLI をインストールして認証し、基本操作を確認する |
+| [2. 星評価を追加する: 小さな改善][ex2] | 最初の変更 | 既存の評価と null の場合の表示を追加し、最初の PR をマージする |
+| [3. エージェント モード: Plan と Autopilot][ex3] | エージェント モード | Issue から機能を計画し、Autopilot で実装して Interactive でレビューする |
+| [4. カスタム指示で Copilot をガイドする][ex4] | コンテキスト | 指示を確認・更新し、フィルター作業に適用する |
+| [5. quality-checks スキルをカスタマイズして使用する][ex5] | 繰り返し可能なチェック | 既存のスキルを確認し、レポート形式を変更して実行する |
+| [6. Playwright MCP で機能を検証する][ex6] | ブラウザーでの確認 | CLI で MCP を設定し、フィルターの動作を調べる |
+| [7. QA エージェントを作成して使用する][ex7] | 要件とカバレッジ | 専門プロファイルを作成・選択し、最終検証の証拠を集める |
+| [8. 機能のプル リクエストを作成してマージする][ex8] | レビューとマージ | 変更全体を確認し、PR を作成して Agent Merge を使用する |
+| [9. GitHub Copilot CLI のスラッシュ コマンド][ex9] | CLI 機能 | コンテキスト、モデル、共有、クラウド エージェントへの任意の委任を確認する |
+| [10. まとめと次のステップ][ex10] | まとめ | ワークフロー、再利用可能なカスタマイズ、追加リソースを確認する |
+| [オプション: Foundry を組み込む][foundry] | ホスト型エージェント | モデルを準備し、カタログに基づくエージェントをデプロイして Web サイトに接続する |
 
 ## 前提条件
 
 このワークショップに参加する前に、次を準備してください。
 
 - [ ] **Copilot Student、Pro、Pro+、Business、Enterprise** のいずれかの有効なプランがある GitHub アカウント
-- [ ] ターミナル / コマンド ライン操作の基本的な知識
-- [ ] インストール済みで設定済みの Git
+- [ ] リポジトリと Codespace を作成する権限
+- [ ] ターミナルまたはコマンド ラインの基本的な知識
 
 > [!TIP]
-> 有料プランがありませんか。認証済みの学生は [GitHub Education][callout-student-plan-education] を通じて GitHub Copilot を無料で利用できます。**Copilot Student** プランには、このワークショップで使用する agent、MCP、code review、Copilot CLI の機能が含まれているため、すべての harness を完了できます。
+> 有料プランがありませんか。認証済みの学生は [GitHub Education][callout-student-plan-education] を通じて GitHub Copilot を無料で利用できます。**Copilot Student** プランには、このワークショップで使用する agent、MCP、code review、Copilot CLI の機能が含まれています。
 
 [callout-student-plan-education]: https://github.com/education/students
 
@@ -47,11 +51,13 @@ lastUpdated: 2026-06-30
 
 [ex0]: 0-prerequisites/
 [ex1]: 1-install-copilot-cli/
-[ex2]: 2-custom-instructions/
-[ex3]: 3-generating-code/
-[ex4]: 4-mcp/
+[ex2]: 2-add-star-rating/
+[ex3]: 3-agent-modes/
+[ex4]: 4-custom-instructions/
 [ex5]: 5-agent-skills/
-[ex6]: 6-custom-agents/
-[ex7]: 7-slash-commands/
+[ex6]: 6-mcp-playwright/
+[ex7]: 7-qa-agent/
+[ex8]: 8-create-pull-request/
+[ex9]: 9-cli-power-tools/
+[ex10]: 10-review/
 [foundry]: 8-foundry-agent/
-[ex9]: 9-review/
